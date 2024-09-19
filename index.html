@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Proteina</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+
+        header {
+            background-color: #d22;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        header .logo h1 {
+            margin: 0;
+        }
+
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 20px;
+        }
+
+        header nav ul li {
+            display: inline;
+        }
+
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        header .user-actions button {
+            margin-left: 10px;
+            background-color: #fff;
+            color: #d22;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .info {
+            display: flex;
+            justify-content: space-around;
+            background-color: #fff;
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .promotions {
+            padding: 20px;
+        }
+
+        .promotions h2 {
+            text-align: center;
+            color: #d22;
+        }
+
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .product {
+            background-color: #fff;
+            padding: 15px;
+            margin: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+            width: calc(20% - 40px);
+            box-sizing: border-box;
+        }
+
+        .product img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .product p {
+            margin: 5px 0;
+        }
+
+        .product button {
+            background-color: #d22;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .cart {
+            display: none;
+            position: fixed;
+            top: 10px; 
+            right: 20px; 
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            width: 400px;
+            height: 400px; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            overflow-y: auto; 
+        }
+
+        .cart h3 {
+            margin-top: 0;
+            color: #d22;
+        }
+
+        .cart ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .cart ul li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            justify-content: space-between;
+        }
+
+        .cart ul li img {
+            width: 50px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        .cart ul li span {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .cart-total {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #d22;
+        }
+
+        .remove-btn {
+            background-color: #d22;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        @media (max-width: 800px) {
+            header nav ul {
+                gap: 10px;
+            }
+
+            .product {
+                width: calc(50% - 40px);
+            }
+
+            .cart {
+                width: 80%;
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            header nav ul {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            header .user-actions {
+                justify-content: center;
+            }
+
+            .product {
+                width: calc(50% - 20px);
+                margin: 10px 5px;
+            }
+
+            .cart {
+                width: 90%;
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .product {
+                width: calc(100% - 20px);
+                margin: 10px 5px;
+            }
+
+            .cart {
+                width: 100%;
+                height: 200px;
+                right: 0;
+            }
+
+            header nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .info {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>MiProteina</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Registrarse</a></li>
+                <li><a href="#">Marcas</a></li>
+                <li><a href="#">Objetivos</a></li>
+                <li><a href="#">Promociones</a></li>
+                <li><a href="#">Calculadora</a></li>
+                <li><a href="#">Tiendas</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Contáctenos</a></li>
+            </ul>
+        </nav>
+        <div class="user-actions">
+            <button>Ingresar</button>
+            <button>Categorias</button>
+            <button onclick="verCarrito()">Carrito</button>
+            <span id="conteo">0</span>
+        </div>
+    </header>
+    <section class="promotions">
+        <h2>Estos son nuestros productos</h2>
+        <div class="products">
+            <div class="product">
+                <img src="IMAGENES CARRITOS/JUST WHEY.png" alt="Just a whey - 900g">
+                <p>900g</p>
+                <p>Just a whey - 900g</p>
+                <p>$140.000</p>
+                <button onclick="agregarAlCarrito('Just a whey - 900g', 140000, 'IMAGENES CARRITOS/JUST WHEY.png')">Agregar al carrito</button>
+            </div>
+            <div class="product">
+                <img src="IMAGENES CARRITOS/CREATINE DRIVE.png" alt="Creatine drive - 2,2 lb">
+                <p>2,2 lb</p>
+                <p>Creatine drive - 2,2 lb</p>
+                <p>$210.000</p>
+                <button onclick="agregarAlCarrito('Creatine drive - 2,2 lb', 210000, 'IMAGENES CARRITOS/CREATINE DRIVE.png')">Agregar al carrito</button>
+            </div>
+            <div class="product">
+                <img src="IMAGENES CARRITOS/CREATINE ANIMAL.jpg" alt="Animal creatine - 500 grms">
+                <p>500 grms</p>
+                <p>Animal creatine - 500 grms</p>
+                <p>$170.000</p>
+                <button onclick="agregarAlCarrito('Animal creatine - 500 grms', 170000, 'IMAGENES CARRITOS/CREATINE ANIMAL.jpg')">Agregar al carrito</button>
+            </div>
+            <div class="product">
+                <img src="IMAGENES CARRITOS/C VASS MONOHIDRATADA.png" alt="C vass monohidratada cr">
+                <p>300 grms</p>
+                <p>C vass monohidratada cr</p>
+                <p>$103.000</p>
+                <button onclick="agregarAlCarrito('C vass monohidratada cr', 103000, 'IMAGENES CARRITOS/C VASS MONOHIDRATADA.png')">Agregar al carrito</button>
+            </div>
+            <div class="product">
+                <img src="IMAGENES CARRITOS/GH MAX.png" alt="Gh max - 180 tabletas">
+                <p>180 tabletas</p>
+                <p>Gh max - 180 tabletas</p>
+                <p>$165.000</p>
+                <button onclick="agregarAlCarrito('Gh max - 180 tabletas', 165000, 'IMAGENES CARRITOS/GH MAX.png')">Agregar al carrito</button>
+            </div>
+            <div class="product">
+                <img src="IMAGENES CARRITOS/ISO WHEY.png" alt="Iso whey - 1 kg">
+                <p>1 kg</p>
+                <p>Iso whey - 1 kg</p>
+                <p>$190.000</p>
+                <button onclick="agregarAlCarrito('Iso whey - 1 kg', 190000, 'IMAGENES CARRITOS/ISO WHEY.png')">Agregar al carrito</button>
+            </div>
+            <div class="product">
+                <img src="IMAGENES CARRITOS/BCAA.png" alt="BCAA powder - 600 grms">
+                <p>600 grms</p>
+                <p>BCAA powder - 600 grms</p>
+                <p>$150.000</p>
+                <button onclick="agregarAlCarrito('BCAA powder - 600 grms', 150000, 'IMAGENES CARRITOS/BCAA.png')">Agregar al carrito</button>
+            </div>
+            <div class="product">
+                <img src="IMAGENES CARRITOS/PRE WORKOUT.png" alt="Pre-workout - 250 grms">
+                <p>250 grms</p>
+                <p>Pre-workout - 250 grms</p>
+                <p>$120.000</p>
+                <button onclick="agregarAlCarrito('Pre-workout - 250 grms', 120000, 'IMAGENES CARRITOS/PRE WORKOUT.png')">Agregar al carrito</button>
+            </div>
+            <div class="product">
+                <img src="IMAGENES CARRITOS/MASS GAINER.png" alt="Mass gainer - 750 grms">
+                <p>750 grms</p>
+                <p>Mass gainer - 750 grms</p>
+                <p>$175.000</p>
+                <button onclick="agregarAlCarrito('Mass gainer - 750 grms', 175000, 'IMAGENES CARRITOS/MASS GAINER.png')">Agregar al carrito</button>
+            </div>
+            <div class="product">
+                <img src="IMAGENES CARRITOS/SUPER PROTEIN.png" alt="Super protein - 1.2 kg">
+                <p>1.2 kg</p>
+                <p>Super protein - 1.2 kg</p>
+                <p>$230.000</p>
+                <button onclick="agregarAlCarrito('Super protein - 1.2 kg', 230000, 'IMAGENES CARRITOS/SUPER PROTEIN.png')">Agregar al carrito</button>
+            </div>
+            <div class="product">
+                <img src="IMAGENES CARRITOS/OMEGA 3.png" alt="Omega 3 - 90 cápsulas">
+                <p>90 cápsulas</p>
+                <p>Omega 3 - 90 cápsulas</p>
+                <p>$85.000</p>
+                <button onclick="agregarAlCarrito('Omega 3 - 90 cápsulas', 85000, 'IMAGENES CARRITOS/OMEGA 3.png')">Agregar al carrito</button>
+            </div>
+            <div class="product">
+                <img src="IMAGENES CARRITOS/WEIGHT GAINER .png" alt="Weight gainer - 2 kg">
+                <p>2 kg</p>
+                <p>Weight gainer - 2 kg</p>
+                <p>$300.000</p>
+                <button onclick="agregarAlCarrito('Weight gainer - 2 kg', 300000, 'IMAGENES CARRITOS/WEIGHT GAINER .png')">Agregar al carrito</button>
+            </div>
+        </div>
+    </section>
+    <section class="info">
+        <div class="info-item">
+            <p>PAGO CONTRAENTREGA</p>
+            <p>Puedes realizar tus pagos cuando llegue tu pedido a tu casa u oficina, aplican restricciones.</p>
+        </div>
+        <div class="info-item">
+            <p>SEGURIDAD Y GARANTÍA</p>
+            <p>10 años despachando suplementos nutricionales a toda Colombia y más de 100.000 clientes satisfechos.</p>
+        </div>
+        <div class="info-item">
+            <p>TIENDAS EN COLOMBIA</p>
+            <p>Contamos con más de 8 tiendas y franquicias en toda Colombia, encuentra la más cercana a tu ciudad.</p>
+        </div>
+    </section>
+    <div id="carrito" class="cart">
+        <h3>Carrito de Compras</h3>
+        <ul id="listaCarrito"></ul>
+        <div class="cart-total" id="totalCarrito">Total: $0</div>
+        <button onclick="vaciarCarrito()">Vaciar carrito</button>
+    </div>
+    <script>
+        let carrito = [];
+        let total = 0;
+
+        function actualizarConteoCarrito() {
+            document.getElementById('conteo').textContent = carrito.length;
+        }
+
+        function agregarAlCarrito(producto, precio, imagen) {
+            carrito.push({ producto, precio, imagen });
+            total += precio;
+            verCarrito();
+            actualizarConteoCarrito();
+
+            Swal.fire({
+                title: '¡Producto agregado al carrito!',
+                icon: 'success',
+                toast: true,
+                position: 'top-start',
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true,
+            });
+        }
+
+        function eliminarDelCarrito(indice, event) {
+            event.stopPropagation(); 
+            total -= carrito[indice].precio;
+            carrito.splice(indice, 1);
+            verCarrito();
+            actualizarConteoCarrito();
+        }
+
+        function verCarrito() {
+            const carritoElemento = document.getElementById("carrito");
+            const listaCarrito = document.getElementById("listaCarrito");
+            const totalCarrito = document.getElementById("totalCarrito");
+            
+            listaCarrito.innerHTML = "";
+            carrito.forEach((item, index) => {
+                const li = document.createElement("li");
+                li.innerHTML = `<img src="${item.imagen}" alt="${item.producto}"><span>${item.producto}</span>: $${item.precio} <button class="remove-btn" onclick="eliminarDelCarrito(${index}, event)">Eliminar</button>`;
+                listaCarrito.appendChild(li);
+            });
+
+            totalCarrito.textContent = `Total: $${total}`;
+            carritoElemento.style.display = "block";
+
+            
+            document.addEventListener("click", function(event) {
+                const isClickInside = carritoElemento.contains(event.target);
+                const isCarritoButton = event.target === document.querySelector('.user-actions button[onclick="verCarrito()"]');
+                
+                if (!isClickInside && !isCarritoButton) {
+                    carritoElemento.style.display = "none";
+                }
+            });
+        }
+
+        function vaciarCarrito() {
+            carrito = [];
+            total = 0;
+            actualizarConteoCarrito(); 
+            verCarrito(); 
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
